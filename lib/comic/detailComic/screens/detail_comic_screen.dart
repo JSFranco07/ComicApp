@@ -4,7 +4,7 @@ import 'package:comic_tech/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/// Screen to all comics
+/// Screen to detail comic
 class DetailComicScreen extends GetView<DetailComicController> {
   /// Constructor
   const DetailComicScreen({Key? key}) : super(key: key);
@@ -13,10 +13,7 @@ class DetailComicScreen extends GetView<DetailComicController> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Comic Book'),
-        centerTitle: true,
-      ),
+      appBar: customAppBar(context: context),
       body: controller.obx(
         (state) => Column(
           children: [
@@ -26,44 +23,7 @@ class DetailComicScreen extends GetView<DetailComicController> {
               width: size.width,
               fit: BoxFit.fill,
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: size.height * 0.025),
-                      if (state.characterCredits!.isNotEmpty)
-                        _DetailComic(
-                          title: 'Characters',
-                          list: state.characterCredits!,
-                          position: 1,
-                        ),
-                      if (state.teamCredits!.isNotEmpty)
-                        _DetailComic(
-                          title: 'Team',
-                          list: state.teamCredits!,
-                          position: 2,
-                        ),
-                      if (state.locationCredits!.isNotEmpty)
-                        _DetailComic(
-                          title: 'Location',
-                          list: state.locationCredits!,
-                          position: 3,
-                        ),
-                      if (state.characterCredits!.isEmpty &&
-                          state.teamCredits!.isEmpty &&
-                          state.locationCredits!.isEmpty)
-                        CustomTextBox(
-                          width: size.width * 0.8,
-                          text: 'There is no information for this comic',
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            _VolumeData(comic: state),
           ],
         ),
         onLoading: const LoadingData(text: 'Loading Comic Data'),
@@ -73,8 +33,60 @@ class DetailComicScreen extends GetView<DetailComicController> {
   }
 }
 
-class _DetailComic extends GetView<DetailComicController> {
-  const _DetailComic({
+class _VolumeData extends StatelessWidget {
+  const _VolumeData({
+    required this.comic,
+    Key? key,
+  }) : super(key: key);
+
+  final DetailComicModel comic;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: size.height * 0.025),
+              if (comic.characterCredits!.isNotEmpty)
+                _DetailVolume(
+                  title: 'Characters',
+                  list: comic.characterCredits!,
+                  position: 1,
+                ),
+              if (comic.teamCredits!.isNotEmpty)
+                _DetailVolume(
+                  title: 'Team',
+                  list: comic.teamCredits!,
+                  position: 2,
+                ),
+              if (comic.locationCredits!.isNotEmpty)
+                _DetailVolume(
+                  title: 'Location',
+                  list: comic.locationCredits!,
+                  position: 3,
+                ),
+              if (comic.characterCredits!.isEmpty &&
+                  comic.teamCredits!.isEmpty &&
+                  comic.locationCredits!.isEmpty)
+                CustomTextBox(
+                  width: size.width * 0.8,
+                  text: 'There is no information for this comic',
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailVolume extends GetView<DetailComicController> {
+  const _DetailVolume({
     required this.title,
     required this.list,
     required this.position,

@@ -71,7 +71,7 @@ class AllComicsModel {
   final DateTime? coverDate;
   final DateTime? dateAdded;
   final DateTime? dateLastUpdated;
-  final dynamic? deck;
+  final dynamic deck;
   final String? description;
   final bool? hasStaffReview;
   final int? id;

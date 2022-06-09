@@ -1,7 +1,7 @@
 import 'package:comic_tech/comic/detailComic/detail_comic.dart';
 import 'package:get/get.dart';
 
-/// Binding to init detail comic controller
+/// Binding to init DetailComicController
 class DetailComicBinding implements Bindings {
   @override
   void dependencies() {

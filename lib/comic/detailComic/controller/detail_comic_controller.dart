@@ -28,35 +28,17 @@ class DetailComicController extends GetxController
 
   final RxList<String> _teamsImages = [''].obs;
 
-  /// List to temas images
+  /// List to teams images
   List<String> get teamsImages =>
       _teamsImages.map((element) => element).toList();
   set teamsImages(List<String> value) => _teamsImages.value = value;
 
-  /// Get detail to select comic
+  /// Get detail of comic select
   Future<void> getDetailComic() async {
-    charactersImages = [];
     final response = await service.getDetailComic();
     if (response != null) {
       if (response.statusCode == 1) {
-        for (var i = 0; i < response.results!.characterCredits!.length; i++) {
-          final character = await _getDetailImage(
-            response.results!.characterCredits![i].apiDetailUrl!,
-          );
-          charactersImages = [...charactersImages, character];
-        }
-        for (var i = 0; i < response.results!.teamCredits!.length; i++) {
-          final character = await _getDetailImage(
-            response.results!.teamCredits![i].apiDetailUrl!,
-          );
-          teamsImages = [...teamsImages, character];
-        }
-        for (var i = 0; i < response.results!.locationCredits!.length; i++) {
-          final character = await _getDetailImage(
-            response.results!.locationCredits![i].apiDetailUrl!,
-          );
-          locationImages = [...locationImages, character];
-        }
+        await _loadImages(response.results!);
         change(response.results, status: RxStatus.success());
       } else {
         change(null, status: RxStatus.error(response.error));
@@ -71,7 +53,32 @@ class DetailComicController extends GetxController
     }
   }
 
-  /// Get images
+  /// Load volume images
+  Future<void> _loadImages(DetailComicModel comic) async {
+    charactersImages = [];
+    teamsImages = [];
+    locationImages = [];
+    for (var i = 0; i < comic.characterCredits!.length; i++) {
+      final character = await _getDetailImage(
+        comic.characterCredits![i].apiDetailUrl!,
+      );
+      charactersImages = [...charactersImages, character];
+    }
+    for (var i = 0; i < comic.teamCredits!.length; i++) {
+      final character = await _getDetailImage(
+        comic.teamCredits![i].apiDetailUrl!,
+      );
+      teamsImages = [...teamsImages, character];
+    }
+    for (var i = 0; i < comic.locationCredits!.length; i++) {
+      final character = await _getDetailImage(
+        comic.locationCredits![i].apiDetailUrl!,
+      );
+      locationImages = [...locationImages, character];
+    }
+  }
+
+  /// Get volume images
   Future<String> _getDetailImage(String url) async {
     final response = await service.getDetailImage(url);
     if (response != null && response.statusCode == 1) {

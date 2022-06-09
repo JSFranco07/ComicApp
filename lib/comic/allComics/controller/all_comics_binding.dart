@@ -1,7 +1,7 @@
 import 'package:comic_tech/comic/allComics/all_comics.dart';
 import 'package:get/get.dart';
 
-/// Binding to init all comics controller
+/// Binding to init AllComicsController
 class AllComicsBinding implements Bindings {
   @override
   void dependencies() {

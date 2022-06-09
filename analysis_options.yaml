@@ -23,7 +23,6 @@ linter:
   # producing the lint.
   rules:
     sort_constructors_first: true
-    public_member_api_docs: true
     require_trailing_commas: true
     sized_box_for_whitespace: true
     prefer_single_quotes: true 

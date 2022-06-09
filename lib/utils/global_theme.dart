@@ -11,6 +11,13 @@ ThemeData globalTheme() {
         color: Colors.black,
         letterSpacing: 0.0,
       ),
+      headline3: textTheme.headline3?.copyWith(
+        fontFamily: 'Joan',
+        fontWeight: FontWeight.w600,
+        fontSize: 22.0,
+        color: Colors.white,
+        letterSpacing: 0.0,
+      ),
       bodyText1: textTheme.bodyText1?.copyWith(
         fontFamily: 'Joan',
         fontWeight: FontWeight.w500,
@@ -22,13 +29,6 @@ ThemeData globalTheme() {
         fontFamily: 'Joan',
         fontWeight: FontWeight.w400,
         fontSize: 14.0,
-        color: Colors.black,
-        letterSpacing: 0.0,
-      ),
-      caption: textTheme.caption?.copyWith(
-        fontFamily: 'Joan',
-        fontWeight: FontWeight.w700,
-        fontSize: 12.0,
         color: Colors.black,
         letterSpacing: 0.0,
       ),

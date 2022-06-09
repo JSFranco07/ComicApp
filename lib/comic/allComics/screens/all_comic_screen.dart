@@ -14,9 +14,8 @@ class AllComicsScreen extends GetView<AllComicsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Comic Book'),
-        centerTitle: true,
+      appBar: customAppBar(
+        context: context,
         actions: const [
           _SelectView(isList: true),
           _SelectView(isList: false),
@@ -25,8 +24,8 @@ class AllComicsScreen extends GetView<AllComicsController> {
       body: controller.obx(
         (state) => Obx(
           () => controller.selectViewList
-              ? const _ListComic()
-              : const _GridComic(),
+              ? _ListComic(allComics: state!)
+              : _GridComic(allComics: state!),
         ),
         onLoading: const LoadingData(text: 'Loading Comics'),
         onError: (error) => ErrorText(error: error!),
@@ -45,15 +44,23 @@ class _SelectView extends GetView<AllComicsController> {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => controller.selectViewList = isList,
-      icon: Icon(isList ? Icons.view_list : Icons.grid_view),
+    return Obx(
+      () => IconButton(
+        onPressed: () => controller.selectViewList = isList,
+        icon: Icon(isList ? Icons.view_list : Icons.grid_view),
+        color: (isList && controller.selectViewList ||
+                (!isList && !controller.selectViewList))
+            ? Colors.white
+            : Colors.white.withOpacity(0.5),
+      ),
     );
   }
 }
 
-class _ListComic extends GetView<AllComicsController> {
-  const _ListComic({Key? key}) : super(key: key);
+class _ListComic extends StatelessWidget {
+  const _ListComic({required this.allComics, Key? key}) : super(key: key);
+
+  final List<AllComicsModel> allComics;
 
   @override
   Widget build(BuildContext context) {
@@ -61,95 +68,105 @@ class _ListComic extends GetView<AllComicsController> {
     return ListView(
       padding: EdgeInsets.all(size.height * 0.02),
       shrinkWrap: true,
-      children: controller.state!
-          .map(
-            (comic) => Column(
-              children: [
-                CustomCard(
-                  onTap: () {
-                    if (Get.find<ConnectivityController>().validateConnection(
-                      context: context,
-                    )) {
-                      controller.selectComic = comic;
-                      Get.toNamed(Routes.detailComic);
-                    }
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          bottomLeft: Radius.circular(15.0),
-                        ),
-                        child: CustomImageNetwork(
-                          url: comic.image!.originalUrl!,
-                          height: size.height * 0.3,
-                          width: size.width * 0.4,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.02,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: size.height * 0.02),
-                              FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: SizedBox(
-                                  width: size.width * 0.5,
-                                  child: Text(
-                                    comic.name != null
-                                        ? '${comic.name} #${comic.issueNumber}'
-                                        : 'Name not available #${comic.issueNumber}',
-                                    style:
-                                        Theme.of(context).textTheme.headline2,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: size.height * 0.005),
-                              FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: SizedBox(
-                                  width: size.width * 0.25,
-                                  child: Text(
-                                    dateFormat(comic.dateAdded!),
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.025,
-                )
-              ],
-            ),
-          )
-          .toList(),
+      children: allComics.map((comic) => _CardListComic(comic: comic)).toList(),
     );
   }
 }
 
-class _GridComic extends GetView<AllComicsController> {
-  const _GridComic({Key? key}) : super(key: key);
+class _CardListComic extends GetView<AllComicsController> {
+  const _CardListComic({
+    Key? key,
+    required this.comic,
+  }) : super(key: key);
+
+  final AllComicsModel comic;
 
   @override
   Widget build(BuildContext context) {
-    final length =
-        ((controller.state!.length % 2) + controller.state!.length) ~/ 2;
+    final size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        CustomCard(
+          onTap: () {
+            if (Get.find<ConnectivityController>().validateConnection(
+              context: context,
+            )) {
+              controller.selectComic = comic;
+              Get.toNamed(Routes.detailComic);
+            }
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  bottomLeft: Radius.circular(15.0),
+                ),
+                child: CustomImageNetwork(
+                  url: comic.image!.originalUrl!,
+                  height: size.height * 0.3,
+                  width: size.width * 0.4,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.height * 0.02,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: size.height * 0.02),
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: SizedBox(
+                          width: size.width * 0.5,
+                          child: Text(
+                            comic.name != null
+                                ? '${comic.name} #${comic.issueNumber}'
+                                : 'Name not available #${comic.issueNumber}',
+                            style: Theme.of(context).textTheme.headline2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.005),
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: SizedBox(
+                          width: size.width * 0.25,
+                          child: Text(
+                            dateFormat(comic.dateAdded!),
+                            style: Theme.of(context).textTheme.subtitle1,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(
+          height: size.height * 0.025,
+        ),
+      ],
+    );
+  }
+}
+
+class _GridComic extends StatelessWidget {
+  const _GridComic({required this.allComics, Key? key}) : super(key: key);
+
+  final List<AllComicsModel> allComics;
+
+  @override
+  Widget build(BuildContext context) {
+    final length = ((allComics.length % 2) + allComics.length) ~/ 2;
 
     final size = MediaQuery.of(context).size;
 
@@ -163,13 +180,13 @@ class _GridComic extends GetView<AllComicsController> {
           children: [
             Row(
               children: [
-                _CardGridComic(index: 2 * index),
+                _CardGridComic(comic: allComics[2 * index]),
                 SizedBox(width: size.width * 0.05),
-                if (length == 1 && controller.state!.length != 2)
+                if (length == 1 && allComics.length != 2)
                   Expanded(child: Container()),
-                if (_isPar(controller.state!.length) || (index != length - 1))
-                  _CardGridComic(index: (2 * index) + 1),
-                if (_isPar(controller.state!.length) &&
+                if (_isPar(allComics.length) || (index != length - 1))
+                  _CardGridComic(comic: allComics[(2 * index) + 1]),
+                if (_isPar(allComics.length) &&
                     index == length - 1 &&
                     length != 1)
                   Expanded(child: Container()),
@@ -193,11 +210,11 @@ class _GridComic extends GetView<AllComicsController> {
 
 class _CardGridComic extends GetView<AllComicsController> {
   const _CardGridComic({
-    required this.index,
+    required this.comic,
     Key? key,
   }) : super(key: key);
 
-  final int index;
+  final AllComicsModel comic;
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +226,7 @@ class _CardGridComic extends GetView<AllComicsController> {
           if (Get.find<ConnectivityController>().validateConnection(
             context: context,
           )) {
-            controller.selectComic = controller.state![index];
+            controller.selectComic = comic;
             Get.toNamed(Routes.detailComic);
           }
         },
@@ -222,7 +239,7 @@ class _CardGridComic extends GetView<AllComicsController> {
                 topRight: Radius.circular(15.0),
               ),
               child: CustomImageNetwork(
-                url: controller.state![index].image!.originalUrl!,
+                url: comic.image!.originalUrl!,
                 height: size.height * 0.3,
                 width: size.width * 0.5,
                 fit: BoxFit.fill,
@@ -239,19 +256,21 @@ class _CardGridComic extends GetView<AllComicsController> {
                   FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Text(
-                      controller.state![index].name != null
-                          ? '${controller.state![index].name} #${controller.state![index].issueNumber}'
-                          : 'Name not available #${controller.state![index].issueNumber}',
+                      comic.name != null
+                          ? '${comic.name} #${comic.issueNumber}'
+                          : 'Name not available #${comic.issueNumber}',
                       style: Theme.of(context).textTheme.headline2,
                     ),
                   ),
                   SizedBox(height: size.height * 0.005),
-                  CustomTextBox(
-                    width: size.width * 0.125,
-                    text: dateFormat(
-                      controller.state![index].dateAdded!,
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      dateFormat(
+                        comic.dateAdded!,
+                      ),
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
-                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ],
               ),

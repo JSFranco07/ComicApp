@@ -3,7 +3,7 @@ import 'package:comic_tech/comic/allComics/all_comics.dart';
 
 /// Service to call API
 class AllComicsService {
-  /// Load to all comics
+  /// Service to load all comics
   Future<BaseResponse<List<AllComicsModel>>?> getAllComics() async {
     try {
       final response = await ApiRequest.get(

@@ -23,10 +23,10 @@ class ApiRequest {
     _headers[HttpHeaders.contentTypeHeader] = 'application/json';
   }
 
-  /// Parse json to Map
+  /// Parse String to Map
   static dynamic _decode(String response) => json.decode(response);
 
-  /// Encode json Map in String
+  /// Encode Map in String
   static String _encode(Map<String, dynamic> response) => json.encode(response);
 
   /// Get requests
