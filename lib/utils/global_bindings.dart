@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'utils.dart';
 
-/// Inicializa los controladores de manera global
+/// Init global controllers
 class GlobalBinding implements Bindings {
   @override
   void dependencies() {

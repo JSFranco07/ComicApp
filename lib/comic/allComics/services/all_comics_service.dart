@@ -3,8 +3,8 @@ import 'package:comic_tech/comic/allComics/all_comics.dart';
 
 /// Service to call API
 class AllComicsService {
-  /// Load all comics
-  Future<BaseResponse<List<AllComicsModel>>> getAllComics() async {
+  /// Load to all comics
+  Future<BaseResponse<List<AllComicsModel>>?> getAllComics() async {
     try {
       final response = await ApiRequest.get(
         'http://comicvine.gamespot.com/api/issues/',
@@ -16,16 +16,7 @@ class AllComicsService {
       );
       return res;
     } catch (e) {
-      return BaseResponse(
-        'Please check your internet connection and try again later.',
-        -1,
-        -1,
-        -1,
-        -1,
-        -1,
-        null,
-        '',
-      );
+      return null;
     }
   }
 }

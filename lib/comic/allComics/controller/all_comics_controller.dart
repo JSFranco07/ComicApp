@@ -20,18 +20,27 @@ class AllComicsController extends GetxController
 
   final RxBool _selectViewList = false.obs;
 
-  /// Methods get and set to select comic
+  /// Methods get and set to select view option
   bool get selectViewList => _selectViewList.value;
   set selectViewList(bool value) => _selectViewList.value = value;
 
-  /// Method to get all comics
+  /// Load all comics
   Future<void> getAllComics() async {
     change([], status: RxStatus.loading());
     final response = await service.getAllComics();
-    if (response.statusCode == 1) {
-      change(response.results, status: RxStatus.success());
+    if (response != null) {
+      if (response.statusCode == 1) {
+        change(response.results, status: RxStatus.success());
+      } else {
+        change([], status: RxStatus.error(response.error));
+      }
     } else {
-      change([], status: RxStatus.error(response.error));
+      change(
+        [],
+        status: RxStatus.error(
+          'An unexpected error occurred, please check your Internet connection and try again later',
+        ),
+      );
     }
   }
 }

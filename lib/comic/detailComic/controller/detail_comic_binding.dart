@@ -1,7 +1,7 @@
 import 'package:comic_tech/comic/detailComic/detail_comic.dart';
 import 'package:get/get.dart';
 
-/// Binding para inicializar controlador de los tipos de checklist
+/// Binding to init detail comic controller
 class DetailComicBinding implements Bindings {
   @override
   void dependencies() {

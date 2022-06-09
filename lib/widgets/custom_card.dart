@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Widget para cargar imágenes desde los assets
+/// Widget a custom card
 class CustomCard extends StatelessWidget {
   /// Constructor
   const CustomCard({
@@ -9,9 +9,10 @@ class CustomCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// Ruta de la imagen
+  /// Widget
   final Widget child;
 
+  /// Function to call
   final void Function()? onTap;
 
   @override

@@ -13,7 +13,6 @@ class AllComicsScreen extends GetView<AllComicsController> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Comic Book'),
@@ -29,24 +28,8 @@ class AllComicsScreen extends GetView<AllComicsController> {
               ? const _ListComic()
               : const _GridComic(),
         ),
-        onLoading: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(),
-              SizedBox(width: size.width * 0.05),
-              FittedBox(
-                child: Text(
-                  'Loading Comics',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              )
-            ],
-          ),
-        ),
-        onError: (error) => Center(
-          child: Text(error!),
-        ),
+        onLoading: const LoadingData(text: 'Loading Comics'),
+        onError: (error) => ErrorText(error: error!),
       ),
     );
   }
@@ -263,14 +246,12 @@ class _CardGridComic extends GetView<AllComicsController> {
                     ),
                   ),
                   SizedBox(height: size.height * 0.005),
-                  FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Text(
-                      dateFormat(
-                        controller.state![index].dateAdded!,
-                      ),
-                      style: Theme.of(context).textTheme.subtitle1,
+                  CustomTextBox(
+                    width: size.width * 0.125,
+                    text: dateFormat(
+                      controller.state![index].dateAdded!,
                     ),
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ],
               ),

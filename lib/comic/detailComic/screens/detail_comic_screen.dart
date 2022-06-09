@@ -55,10 +55,10 @@ class DetailComicScreen extends GetView<DetailComicController> {
                       if (state.characterCredits!.isEmpty &&
                           state.teamCredits!.isEmpty &&
                           state.locationCredits!.isEmpty)
-                        const FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Text('There is no information for this comic'),
-                        )
+                        CustomTextBox(
+                          width: size.width * 0.8,
+                          text: 'There is no information for this comic',
+                        ),
                     ],
                   ),
                 ),
@@ -66,24 +66,8 @@ class DetailComicScreen extends GetView<DetailComicController> {
             ),
           ],
         ),
-        onLoading: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(),
-              SizedBox(width: size.width * 0.05),
-              FittedBox(
-                child: Text(
-                  'Loading Comic Data',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              )
-            ],
-          ),
-        ),
-        onError: (error) => Center(
-          child: Text(error!),
-        ),
+        onLoading: const LoadingData(text: 'Loading Comic Data'),
+        onError: (error) => ErrorText(error: error!),
       ),
     );
   }
@@ -107,19 +91,14 @@ class _DetailComic extends GetView<DetailComicController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        CustomTextBox(
           width: size.width * 0.25,
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.headline2,
-            ),
-          ),
+          text: title,
+          style: Theme.of(context).textTheme.headline2,
         ),
         SizedBox(
           width: size.width,
-          height: size.height * 0.15,
+          height: size.height * 0.165,
           child: ListView(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
@@ -130,11 +109,12 @@ class _DetailComic extends GetView<DetailComicController> {
                       Column(
                         children: [
                           SizedBox(height: size.height * 0.01),
-                          Text(
-                            character.name!,
+                          CustomTextBox(
+                            width: size.width * 0.11,
+                            text: character.name!,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
-                          SizedBox(height: size.height * 0.015),
+                          SizedBox(height: size.height * 0.01),
                           CustomImageNetwork(
                             url: position == 1
                                 ? controller.charactersImages[controller

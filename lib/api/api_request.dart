@@ -4,32 +4,32 @@ import 'dart:io';
 import 'package:comic_tech/utils/utils.dart';
 import 'package:http/http.dart' as http;
 
-/// Clase para hacer las peticiones a la API
+/// Class to define the calls to the api
 class ApiRequest {
-  /// Headers de la petición
+  /// Headers
   static final Map<String, String> _headers = {};
 
-  /// Url de la petición
+  /// Url
   static Uri _uri = Uri();
 
-  /// Método para establecer la url y los headers en las peticiones
+  /// Method to set url and headers
   static Future<void> _setRequestData(String path) async {
-    /// Se define la url para la petición
+    /// Define to url
     _uri = Uri.parse(
       '$path?api_key=${Environment.apiKey}&format=json',
     );
 
-    /// Se definen los headers
+    /// Define to headers
     _headers[HttpHeaders.contentTypeHeader] = 'application/json';
   }
 
-  /// Parse un json en formato string a un Map
+  /// Parse json to Map
   static dynamic _decode(String response) => json.decode(response);
 
-  /// Encode un json en formato Map a un String
+  /// Encode json Map in String
   static String _encode(Map<String, dynamic> response) => json.encode(response);
 
-  ///Realiza peticiones tipo GET a la API
+  /// Get requests
   static Future<dynamic> get(String path) async {
     await _setRequestData(path);
     final response = await http.get(
@@ -39,7 +39,7 @@ class ApiRequest {
     return _decode(response.body);
   }
 
-  ///Realiza peticiones tipo POST a la API
+  /// Post requests
   static Future<dynamic> post(String path, Map<String, dynamic> data) async {
     await _setRequestData(path);
     final body = _encode(data);
@@ -55,7 +55,7 @@ class ApiRequest {
     }
   }
 
-  /// Realiza peticiones tipo PUT a la API
+  ///  Put requests
   static Future<dynamic> put(String path, Map<String, dynamic> data) async {
     await _setRequestData(path);
     final body = _encode(data);
@@ -71,7 +71,7 @@ class ApiRequest {
     }
   }
 
-  /// Realiza peticiones tipo DELETE a la API
+  /// Delete requests
   static Future<dynamic> delete(String path) async {
     await _setRequestData(path);
     try {

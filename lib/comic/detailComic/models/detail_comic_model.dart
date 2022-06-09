@@ -108,7 +108,9 @@ class DetailComicModel {
             : List<dynamic>.from(json['story_arc_credits'].map((x) => x)),
         teamCredits: json['team_credits'] == null
             ? null
-            : List<VolumeModel>.from(json['team_credits'].map((x) => x)),
+            : List<VolumeModel>.from(
+                json['team_credits'].map((x) => VolumeModel.fromJson(x)),
+              ),
         teamDisbandedIn: json['team_disbanded_in'] == null
             ? null
             : List<dynamic>.from(json['team_disbanded_in'].map((x) => x)),

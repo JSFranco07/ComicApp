@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:comic_tech/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-/// Widget para cargar imágenes desde los assets
+/// Widget to load assets images
 class CustomImageAsset extends StatelessWidget {
   /// Constructor
   const CustomImageAsset({
@@ -14,19 +14,19 @@ class CustomImageAsset extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// Ruta de la imagen
+  /// Image route
   final String image;
 
-  /// Altura del widget
+  /// Height
   final double? height;
 
-  /// Ancho del widget
+  /// Width
   final double? width;
 
-  /// Ajusta la imagen según el aspecto deseado
+  /// Fit image
   final BoxFit? fit;
 
-  /// Color de la imagen
+  /// Color image
   final Color? color;
 
   @override
@@ -49,7 +49,7 @@ class CustomImageAsset extends StatelessWidget {
   }
 }
 
-/// Widget para cargar imágenes desde la web
+/// Widget to load network images
 class CustomImageNetwork extends StatelessWidget {
   /// Constructor
   const CustomImageNetwork({
@@ -61,19 +61,19 @@ class CustomImageNetwork extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// Url de la imagen
+  /// Url
   final String url;
 
-  /// Altura del widget
+  /// Height
   final double? height;
 
-  /// Ancho del widget
+  /// Width
   final double? width;
 
-  /// Ajusta la imagen según el aspecto deseado
+  /// Fit
   final BoxFit? fit;
 
-  /// Color de la imagen
+  /// Color
   final Color? color;
 
   @override

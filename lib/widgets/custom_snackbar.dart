@@ -2,7 +2,7 @@ import 'package:comic_tech/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-///
+/// Send custom alerts
 GetSnackBar customSnackBar({
   required BuildContext context,
   required String message,

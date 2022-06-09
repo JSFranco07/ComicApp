@@ -1,7 +1,7 @@
 import 'package:comic_tech/comic/detailComic/detail_comic.dart';
 import 'package:get/get.dart';
 
-/// Middleware para los tipos de checklist
+/// Middleware to detail comic
 class DetailComicMiddleware extends GetMiddleware {
   @override
   GetPageBuilder? onPageBuildStart(GetPageBuilder? page) {

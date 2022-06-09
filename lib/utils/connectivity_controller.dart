@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-/// Controlador del estado de la conexión
+/// Controller network state
 class ConnectivityController extends GetxController {
   /// Constructor
   ConnectivityController() {
@@ -45,7 +45,7 @@ class ConnectivityController extends GetxController {
     }
   }
 
-  /// Método para validar el estado de la conexión a internet
+  /// Validate to network state
   bool validateConnection({
     BuildContext? context,
   }) {

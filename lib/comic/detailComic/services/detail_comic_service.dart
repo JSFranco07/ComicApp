@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 
 /// Service to call API
 class DetailComicService {
-  /// Load all comics
-  Future<BaseResponse<DetailComicModel>> getDetailComic() async {
+  /// Load specific comic
+  Future<BaseResponse<DetailComicModel>?> getDetailComic() async {
     try {
       final response = await ApiRequest.get(
         Get.find<AllComicsController>().selectComic.apiDetailUrl!,
@@ -18,20 +18,12 @@ class DetailComicService {
       );
       return res;
     } catch (e) {
-      return BaseResponse(
-        'Please check your internet connection and try again later.',
-        -1,
-        -1,
-        -1,
-        -1,
-        -1,
-        null,
-        '',
-      );
+      return null;
     }
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> getDetailImage(String url) async {
+  /// Service to load all images in the detail comic
+  Future<BaseResponse<Map<String, dynamic>>?> getDetailImage(String url) async {
     try {
       final response = await ApiRequest.get(url);
       BaseResponse<Map<String, dynamic>> res =
@@ -41,16 +33,7 @@ class DetailComicService {
       );
       return res;
     } catch (e) {
-      return BaseResponse(
-        'Please check your internet connection and try again later.',
-        -1,
-        -1,
-        -1,
-        -1,
-        -1,
-        null,
-        '',
-      );
+      return null;
     }
   }
 }

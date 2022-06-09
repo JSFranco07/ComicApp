@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Global App Theme
 ThemeData globalTheme() {
   TextTheme _globalTextTheme(TextTheme textTheme) {
     return textTheme.copyWith(
@@ -46,7 +47,7 @@ ThemeData globalTheme() {
 
   return theme.copyWith(
     primaryColor: const Color.fromRGBO(255, 96, 94, 1),
-    shadowColor: Colors.red.withOpacity(0.75),
+    shadowColor: Colors.red.withOpacity(0.5),
     colorScheme: _colorSchemeTheme(theme.colorScheme),
     scaffoldBackgroundColor: const Color.fromRGBO(255, 255, 255, 1),
     textTheme: _globalTextTheme(theme.textTheme),

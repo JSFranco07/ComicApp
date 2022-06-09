@@ -47,7 +47,7 @@ class BaseResponse<T> {
   @JsonKey(name: 'number_of_total_results')
   final int? numberOfTotalResults;
 
-  /// Variable que en caso de error retorna un mensaje
+  /// Request status
   @JsonKey(name: 'status_code')
   final int? statusCode;
 
@@ -55,7 +55,7 @@ class BaseResponse<T> {
   @JsonKey(name: 'results')
   final T? results;
 
-  /// Variable que en caso de error retorna un mensaje
+  /// Version
   @JsonKey(name: 'version')
   final String? version;
 
