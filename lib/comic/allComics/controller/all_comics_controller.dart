@@ -18,6 +18,12 @@ class AllComicsController extends GetxController
   AllComicsModel get selectComic => _selectComic.value;
   set selectComic(AllComicsModel value) => _selectComic.value = value;
 
+  final RxBool _selectViewList = false.obs;
+
+  /// Methods get and set to select comic
+  bool get selectViewList => _selectViewList.value;
+  set selectViewList(bool value) => _selectViewList.value = value;
+
   /// Method to get all comics
   Future<void> getAllComics() async {
     change([], status: RxStatus.loading());

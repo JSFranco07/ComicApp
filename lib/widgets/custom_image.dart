@@ -91,29 +91,17 @@ class CustomImageNetwork extends StatelessWidget {
           : 0,
       fit: fit ?? BoxFit.contain,
       errorWidget: (_, error, value) => CircleAvatar(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: CustomImageAsset(
-            image: 'assets/no_image.png',
-            height: height != null
-                ? CalculatedSize.calculatedHeight(height!, size.height)
-                : 0,
-            width: width != null
-                ? CalculatedSize.calculatedWidth(
-                    width!,
-                    size.width,
-                  )
-                : 0,
-            fit: fit ?? BoxFit.contain,
-          ),
+        child: CustomImageAsset(
+          image: 'assets/images/no_image.jpeg',
+          height: height,
+          width: width,
+          fit: fit ?? BoxFit.contain,
         ),
       ),
       color: color,
       progressIndicatorBuilder: (context, url, progress) => Center(
         child: CircularProgressIndicator(
           value: progress.progress,
-          backgroundColor: const Color(0xFF00B100),
-          color: Colors.white,
         ),
       ),
       imageUrl: url,

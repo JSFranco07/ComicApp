@@ -1,3 +1,4 @@
+import 'package:comic_tech/comic/comic.dart';
 import 'package:comic_tech/comic/detailComic/detail_comic.dart';
 import 'package:comic_tech/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,80 +20,150 @@ class DetailComicScreen extends GetView<DetailComicController> {
       body: controller.obx(
         (state) => Column(
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                bottomLeft: Radius.circular(15.0),
+            CustomImageNetwork(
+              url: state!.image!.originalUrl!,
+              height: size.height * 0.45,
+              width: size.width,
+              fit: BoxFit.fill,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: size.height * 0.025),
+                      if (state.characterCredits!.isNotEmpty)
+                        _DetailComic(
+                          title: 'Characters',
+                          list: state.characterCredits!,
+                          position: 1,
+                        ),
+                      if (state.teamCredits!.isNotEmpty)
+                        _DetailComic(
+                          title: 'Team',
+                          list: state.teamCredits!,
+                          position: 2,
+                        ),
+                      if (state.locationCredits!.isNotEmpty)
+                        _DetailComic(
+                          title: 'Location',
+                          list: state.locationCredits!,
+                          position: 3,
+                        ),
+                      if (state.characterCredits!.isEmpty &&
+                          state.teamCredits!.isEmpty &&
+                          state.locationCredits!.isEmpty)
+                        const FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text('There is no information for this comic'),
+                        )
+                    ],
+                  ),
+                ),
               ),
-              child: CustomImageNetwork(
-                url: state!.image!.originalUrl!,
-                height: size.height * 0.4,
-                width: size.width * 0.35,
-                fit: BoxFit.fill,
-              ),
             ),
-            const Text('Characters'),
-            ListView(
-              shrinkWrap: true,
-              children: state.characterCredits!
-                  .map(
-                    (character) => Column(
-                      children: [
-                        Text(character.name!),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
-            const Text('Team'),
-            ListView(
-              shrinkWrap: true,
-              children: state.teamCredits!
-                  .map(
-                    (character) => Column(
-                      children: [
-                        Text(character.name!),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
-            const Text('Location'),
-            ListView(
-              shrinkWrap: true,
-              children: state.locationCredits!
-                  .map(
-                    (character) => Column(
-                      children: [
-                        Text(character.name!),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
-            const Text('Concept'),
-            ListView(
-              shrinkWrap: true,
-              children: state.conceptCredits!
-                  .map(
-                    (character) => Column(
-                      children: [
-                        Text(character.name!),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
-            Text(state.volume!.name!),
           ],
         ),
-        onLoading: const Center(
-          child: CircularProgressIndicator(),
+        onLoading: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(),
+              SizedBox(width: size.width * 0.05),
+              FittedBox(
+                child: Text(
+                  'Loading Comic Data',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
+          ),
         ),
-        onEmpty: const Center(
-          child: Text('Error'),
+        onError: (error) => Center(
+          child: Text(error!),
         ),
       ),
+    );
+  }
+}
+
+class _DetailComic extends GetView<DetailComicController> {
+  const _DetailComic({
+    required this.title,
+    required this.list,
+    required this.position,
+    Key? key,
+  }) : super(key: key);
+
+  final String title;
+  final List<VolumeModel> list;
+  final int position;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: size.width * 0.25,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: size.width,
+          height: size.height * 0.15,
+          child: ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            children: list
+                .map(
+                  (character) => Row(
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(height: size.height * 0.01),
+                          Text(
+                            character.name!,
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          SizedBox(height: size.height * 0.015),
+                          CustomImageNetwork(
+                            url: position == 1
+                                ? controller.charactersImages[controller
+                                    .state!.characterCredits!
+                                    .indexOf(character)]
+                                : position == 2
+                                    ? controller.teamsImages[controller
+                                        .state!.teamCredits!
+                                        .indexOf(character)]
+                                    : controller.locationImages[controller
+                                        .state!.locationCredits!
+                                        .indexOf(character)],
+                            height: size.height * 0.1,
+                            width: size.height * 0.1,
+                            fit: BoxFit.contain,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: size.width * 0.075,
+                      )
+                    ],
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        SizedBox(height: size.height * 0.03)
+      ],
     );
   }
 }

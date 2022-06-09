@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Comic App',
       initialRoute: Routes.allComics,
       getPages: Pages.pages(),
+      theme: globalTheme(),
     );
   }
 }
