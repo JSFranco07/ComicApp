@@ -40,17 +40,17 @@ class DetailComicController extends GetxController
       if (response.statusCode == 1) {
         await _loadImages(response.results!);
         change(response.results, status: RxStatus.success());
-      } else {
-        change(null, status: RxStatus.error(response.error));
+        return;
       }
-    } else {
-      change(
-        null,
-        status: RxStatus.error(
-          'An unexpected error occurred, please check your Internet connection and try again later',
-        ),
-      );
+      change(null, status: RxStatus.error(response.error));
+      return;
     }
+    change(
+      null,
+      status: RxStatus.error(
+        'An unexpected error occurred, please check your Internet connection and try again later',
+      ),
+    );
   }
 
   /// Load volume images
@@ -83,8 +83,7 @@ class DetailComicController extends GetxController
     final response = await service.getDetailImage(url);
     if (response != null && response.statusCode == 1) {
       return response.results!['image']['original_url'].toString();
-    } else {
-      return '';
     }
+    return '';
   }
 }

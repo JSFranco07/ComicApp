@@ -31,16 +31,16 @@ class AllComicsController extends GetxController
     if (response != null) {
       if (response.statusCode == 1) {
         change(response.results, status: RxStatus.success());
-      } else {
-        change([], status: RxStatus.error(response.error));
+        return;
       }
-    } else {
-      change(
-        [],
-        status: RxStatus.error(
-          'An unexpected error occurred, please check your Internet connection and try again later',
-        ),
-      );
+      change([], status: RxStatus.error(response.error));
+      return;
     }
+    change(
+      [],
+      status: RxStatus.error(
+        'An unexpected error occurred, please check your Internet connection and try again later',
+      ),
+    );
   }
 }

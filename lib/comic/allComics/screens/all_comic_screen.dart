@@ -202,9 +202,8 @@ class _GridComic extends StatelessWidget {
   bool _isPar(int number) {
     if (number % 2 == 0) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }
 

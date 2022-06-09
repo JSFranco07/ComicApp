@@ -74,7 +74,8 @@ class _CustomWidgetState extends State<_CustomWidget>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _animationController.reverse();
-      } else if (status == AnimationStatus.dismissed) {
+      }
+      if (status == AnimationStatus.dismissed) {
         _animationController.forward();
       }
     });

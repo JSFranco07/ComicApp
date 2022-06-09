@@ -51,7 +51,8 @@ class ConnectivityController extends GetxController {
   }) {
     if (_connection) {
       return true;
-    } else if (context != null) {
+    }
+    if (context != null) {
       Get.showSnackbar(
         customSnackBar(
           context: context,
@@ -60,8 +61,7 @@ class ConnectivityController extends GetxController {
         ),
       );
       return false;
-    } else {
-      return false;
     }
+    return false;
   }
 }
